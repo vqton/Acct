@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Company Information
+{% endblock title %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Company Information</h2>
+        {% if companyinfo_list %}
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for companyinfo in companyinfo_list %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ companyinfo.name }}</h5>
+                                <dl class="row">
+                                    <dt class="col-sm-5">Address:</dt>
+                                    <dd class="col-sm-7">{{ companyinfo.address }}</dd>
+
+                                    <dt class="col-sm-5">City:</dt>
+                                    <dd class="col-sm-7">{{ companyinfo.city }}</dd>
+
+                                    <dt class="col-sm-5">State:</dt>
+                                    <dd class="col-sm-7">{{ companyinfo.state }}</dd>
+
+                                    <dt class="col-sm-5">Country:</dt>
+                                    <dd class="col-sm-7">{{ companyinfo.country }}</dd>
+
+                                    <dt class="col-sm-5">Zip Code:</dt>
+                                    <dd class="col-sm-7">{{ companyinfo.zip_code }}</dd>
+
+                                    <dt class="col-sm-5">Contact Number:</dt>
+                                    <dd class="col-sm-7">{{ companyinfo.contact_number }}</dd>
+
+                                    <dt class="col-sm-5">Email:</dt>
+                                    <dd class="col-sm-7">{{ companyinfo.email }}</dd>
+
+                                    <dt class="col-sm-5">Tax Identification Number:</dt>
+                                    <dd class="col-sm-7">{{ companyinfo.tax_identification_number }}</dd>
+
+                                    <dt class="col-sm-5">Fiscal Year Start Date:</dt>
+                                    <dd class="col-sm-7">{{ companyinfo.fiscal_year_start_date }}</dd>
+                                </dl>
+                            </div>
+                            <div class="card-footer bg-white">
+                                <a href="{% url 'companyinfo:update' companyinfo.id %}" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-pencil-fill"></i> Update
+                                </a>
+                                <a href="{% url 'companyinfo:delete' companyinfo.id %}" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash-fill"></i> Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                There is no company information available. Please add some data.
+            </div>
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <a href="{% url 'companyinfo:create' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle-fill"></i> Add Company Information
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
