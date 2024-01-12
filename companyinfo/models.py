@@ -13,10 +13,3 @@ class CompanyInformation(models.Model):
     tax_identification_number = models.CharField(max_length=50)
     fiscal_year_start_date = models.DateField()
 
-    class Meta:
-        permissions = [
-            ("add_companyinfo", "Can add company information"),
-            ("change_companyinfo", "Can change company information"),
-            ("delete_companyinfo", "Can delete company information"),
-            ("view_companyinfo", "Can view company information"),
-        ]
