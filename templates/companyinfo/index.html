@@ -50,7 +50,7 @@
                                 <a href="{% url 'companyinfo:update' companyinfo.id %}" class="btn btn-outline-primary btn-sm">
                                     <i class="bi bi-pencil-fill"></i> Update
                                 </a>
-                                <a href="{% url 'companyinfo:delete' companyinfo.id %}" class="btn btn-outline-danger btn-sm">
+                                <a href="#" class="btn btn-outline-danger btn-sm" onclick="confirmDelete('{{ companyinfo.name }}', '{% url 'companyinfo:delete' companyinfo.id %}')">
                                     <i class="bi bi-trash-fill"></i> Delete
                                 </a>
                             </div>
@@ -69,4 +69,12 @@
             </div>
         {% endif %}
     </div>
+
+    <script>
+        function confirmDelete(name, url) {
+            if (confirm('Are you sure you want to delete ' + name + '?')) {
+                window.location.href = url;
+            }
+        }
+    </script>
 {% endblock %}
