@@ -19,7 +19,9 @@ from django.urls import path, include
 from django.contrib.auth.views import LoginView, PasswordResetView,LogoutView
 
 urlpatterns = [
+    
     path("", include("home.urls")),
+    path("coa/", include("COA.urls")),
     path("companyinfo/", include("companyinfo.urls")),
     # path("accounts/", include("django.contrib.auth.urls")),
     path(

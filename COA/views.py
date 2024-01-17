@@ -6,6 +6,11 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from .models import AccountCategory, Account, SubAccount
 
+
+def index(request):
+    return render(request,'COA/index.html')
+
+
 def export_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="account_data.csv"'
