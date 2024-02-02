@@ -1,37 +1,16 @@
 from django.db import models
 
+class AccountType(models.Model):
+    type_id = models.CharField(max_length=10, primary_key=True)
+    type_name = models.CharField(max_length=255)
 
-
-class AccountCategory(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-
-    def __str__(self):
-        return self.name
+class AccountGroup(models.Model):
+    group_id = models.CharField(max_length=10, primary_key=True)
+    group_name = models.CharField(max_length=255)
 
 class Account(models.Model):
-    category = models.ForeignKey(AccountCategory, on_delete=models.CASCADE)
-    code = models.CharField(max_length=20, unique=True)
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    account_type = models.CharField(max_length=50, choices=[
-        ('ASSET', 'Asset'),
-        ('LIABILITY', 'Liability'),
-        ('EQUITY', 'Equity'),
-        ('INCOME', 'Income'),
-        ('EXPENSE', 'Expense'),
-    ])
-    parent_account = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.code} - {self.name}"
-
-class SubAccount(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    code = models.CharField(max_length=20, unique=True)
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-
-    def __str__(self):
-        return f"{self.account.code}.{self.code} - {self.name}"
-
+    account_id = models.CharField(max_length=10, primary_key=True)
+    account_name = models.CharField(max_length=255,null=True, blank=True,)
+    type_id = models.ForeignKey(AccountType, on_delete=models.CASCADE)
+    group_id = models.ForeignKey(AccountGroup, on_delete=models.CASCADE)
+    parent_account_id = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
