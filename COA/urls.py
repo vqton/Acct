@@ -1,6 +1,6 @@
 from django.urls import path
-
-app_name = 'coa'
+from .views import AccountListView, AccountCreateView,AccountDetailView,AccountUpdateView,AccountDeleteView
+app_name = 'COA'
 
 urlpatterns = [
     path('accounts/', AccountListView.as_view(), name='account_list'),
