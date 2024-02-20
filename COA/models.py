@@ -1,5 +1,5 @@
 from decimal import Decimal
-from django.db import connection
+from django.db import IntegrityError, connection
 from django.db import models
 import unicodecsv as csv
 from django.http import HttpResponse
@@ -45,6 +45,7 @@ class Account(models.Model):
             writer.writerow([str(value) if value is not None else '' for value in row])
         
         return response
+    
     @staticmethod
     def import_from_csv(file):
         # file_data = file.read().decode('utf-8-sig')
@@ -74,8 +75,19 @@ class Account(models.Model):
                 
                 # Print the complete query
                 print("Executing query:", cursor.mogrify(query, params))
-  # Print the complete query
-                    #cursor.execute(query, params)
+                
+                try:
+                    cursor.execute(query, params)
+                # Catch the duplicate key error
+                except IntegrityError as e:
+                # Rollback the transaction
+                    connection.rollback()
+                # Print the error message
+                    print("Error:", e)
+                # Skip or update the row as needed
+                # For example, you can use cursor.execute("UPDATE ...") to update the existing row
+                # Or you can use continue to skip the row and move on to the next one
+                continue
           
 class Transaction(models.Model):
     account = models.ForeignKey('Account', on_delete=models.CASCADE)

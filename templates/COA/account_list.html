@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% load spacefilters %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
 {% block title %}
     Chart Of Accounts
 {% endblock title %}
@@ -9,21 +12,7 @@
         <h1 class="navbar-brand">Account List</h1>
         <div class="navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <button class="btn btn-primary me-2">
-                        <i class="bi bi-plus"></i> New Account
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="btn btn-danger me-2">
-                        <i class="bi bi-trash"></i> Delete Selected
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="btn btn-secondary me-2">
-                        <i class="bi bi-pencil"></i> Edit Account
-                    </button>
-                </li>
+                <!-- Reorganize the toolbar operations -->
                 <li class="nav-item">
                     <button class="btn btn-info" id="exportCsvBtn">
                         <i class="bi bi-file-earmark-text"></i> Export CSV
@@ -34,10 +23,34 @@
                         <i class="bi bi-upload"></i> Import CSV
                     </button>
                 </li>
+                <li class="nav-item">
+                    <button class="btn btn-primary me-2">
+                        <i class="bi bi-plus"></i> New Account
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-secondary me-2">
+                        <i class="bi bi-pencil"></i> Edit Account
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-danger me-2">
+                        <i class="bi bi-trash"></i> Delete Selected
+                    </button>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
+
+<!-- Display the filter form as a form with the filter fields and a submit button -->
+<div class="filter-bar">
+    <form method="GET">
+      {% csrf_token %}
+      {{ filter.form|crispy }}  
+    </form>
+  </div>
+{% autoescape on %}
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -55,19 +68,37 @@
     <tbody>
         {% for account in accounts %}
             <tr>
-                <td>{{ account.code }}</td>
-                <td>{{ account.name }}</td>
-                <td>{{ account.level }}</td>
-                <td>{{ account.account_type }}</td>
-                <td>{{ account.description }}</td>
-                <td>{{ account.opening_balance }}</td>
-                <td>{{ account.debit_only }}</td>
-                <td>{{ account.parent_account }}</td>
-                <td>{{ account.notes }}</td>
+                <!-- Set the records that have level 0 to bold -->
+                {% if account.level == 0 %}
+                    <td><strong>{{ account.code }}</strong></td>
+                    <td><strong>{{ account.name }}</strong></td>
+                    <td><strong>{{ account.level }}</strong></td>
+                    <td><strong>{{ account.account_type }}</strong></td>
+                    <td><strong>{{ account.description }}</strong></td>
+                    <td><strong>{{ account.opening_balance }}</strong></td>
+                    <td><strong>{{ account.debit_only }}</strong></td>
+                    <td><strong>{{ account.parent_account }}</strong></td>
+                    <td><strong>{{ account.notes }}</strong></td>
+                {% else %}
+                    <!-- Add spaces to the records that have level greater than 0 according to their level -->
+                    <!-- Use the built-in widthratio template tag to multiply the level by 3 and assign it to a variable called spaces -->
+                    {% widthratio account.level 1 4 as spaces %}
+                    <!-- Use the HTML   entity to repeat a space character the number of times specified by spaces -->
+                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.code }}</td>
+                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.name }}</td>
+                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.level }}</td>
+                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.account_type }}</td>
+                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.description }}</td>
+                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.opening_balance }}</td>
+                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.debit_only }}</td>
+                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.parent_account }}</td>
+                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.notes }}</td>
+                {% endif %}
             </tr>
         {% endfor %}
     </tbody>
 </table>
+{% endautoescape %}
 <script>
     document.getElementById('exportCsvBtn').addEventListener('click', function() {
         // Redirect to the export CSV URL
