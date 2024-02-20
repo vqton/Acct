@@ -34,7 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "home",
     "COA",
-    "companyinfo",
+        "companyinfo",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -84,7 +84,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "acct",
         "USER": "root",
-        "PASSWORD": "1",
+        "PASSWORD": "",
         "HOST": "127.0.0.1",  # Or an IP Address that your DB is hosted on
         "PORT": "3306",
     }

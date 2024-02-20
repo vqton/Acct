@@ -1,16 +1,28 @@
 from django.db import models
 
-class AccountType(models.Model):
-    type_id = models.CharField(max_length=10, primary_key=True)
-    type_name = models.CharField(max_length=255)
-
-class AccountGroup(models.Model):
-    group_id = models.CharField(max_length=10, primary_key=True)
-    group_name = models.CharField(max_length=255)
-
+# Create your models here.
 class Account(models.Model):
-    account_id = models.CharField(max_length=10, primary_key=True)
-    account_name = models.CharField(max_length=255,null=True, blank=True,)
-    type_id = models.ForeignKey(AccountType, on_delete=models.CASCADE)
-    group_id = models.ForeignKey(AccountGroup, on_delete=models.CASCADE)
-    parent_account_id = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
+    code = models.CharField(max_length=10, primary_key=True)
+    name = models.CharField(max_length=255)
+    level = models.PositiveSmallIntegerField()
+    account_type = models.CharField(max_length=20)
+    description = models.CharField(max_length=255)
+    opening_balance = models.DecimalField(max_digits=19, decimal_places=4)
+    debit_only = models.BooleanField()
+    parent_account = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
+    notes = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Transaction(models.Model):
+    account = models.ForeignKey('Account', on_delete=models.CASCADE)
+    opening_balance = models.DecimalField(max_digits=19, decimal_places=4)
+    debit_only = models.BooleanField()
+    debit_amount = models.DecimalField(max_digits=19, decimal_places=4)
+    credit_amount = models.DecimalField(max_digits=19, decimal_places=4)
+    closing_balance = models.DecimalField(max_digits=19, decimal_places=4)
+
+    def __str__(self):
+        return f"{self.account.name} - {self.debit_amount}/{self.credit_amount}"
