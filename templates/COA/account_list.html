@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load spacefilters %}
 {% block title %}
-    Chart Of Accounts
+Chart Of Accounts
 {% endblock title %}
 {% block content %}
 
 
-<input type="text" id="filter-input" placeholder="Filter by name or code" >
+<input type="text" id="filter-input" placeholder="Filter by name or code">
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
@@ -45,7 +45,7 @@
 </nav>
 
 
-<table id="example-table" class="table table-bordered" >
+<table id="example-table" class="table table-bordered">
     <thead>
         <tr>
             <th>Code</th>
@@ -61,43 +61,43 @@
     </thead>
     <tbody>
         {% for account in accounts %}
-            <tr>
-                <!-- Set the records that have level 0 to bold -->
-                {% if account.level == 0 %}
-                    <td><strong>{{ account.code }}</strong></td>
-                    <td><strong>{{ account.name }}</strong></td>
-                    <td><strong>{{ account.level }}</strong></td>
-                    <td><strong>{{ account.account_type }}</strong></td>
-                    <td><strong>{{ account.description }}</strong></td>
-                    <td><strong>{{ account.opening_balance }}</strong></td>
-                    <td><strong>{{ account.debit_only }}</strong></td>
-                    <td><strong>{{ account.parent_account }}</strong></td>
-                    <td><strong>{{ account.notes }}</strong></td>
-                {% else %}
-                    <!-- Add spaces to the records that have level greater than 0 according to their level -->
-                    <!-- Use the built-in widthratio template tag to multiply the level by 3 and assign it to a variable called spaces -->
-                    {% widthratio account.level 1 4 as spaces %}
-                    <!-- Use the HTML   entity to repeat a space character the number of times specified by spaces -->
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.code }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.name }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.level }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.account_type }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.description }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.opening_balance }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.debit_only }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.parent_account }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.notes }}</td>
-                {% endif %}
-            </tr>
+        <tr>
+            <!-- Set the records that have level 0 to bold -->
+            {% if account.level == 0 %}
+            <td><strong>{{ account.code }}</strong></td>
+            <td><strong>{{ account.name }}</strong></td>
+            <td><strong>{{ account.level }}</strong></td>
+            <td><strong>{{ account.account_type }}</strong></td>
+            <td><strong>{{ account.description }}</strong></td>
+            <td><strong>{{ account.opening_balance }}</strong></td>
+            <td><strong>{{ account.debit_only }}</strong></td>
+            <td><strong>{{ account.parent_account }}</strong></td>
+            <td><strong>{{ account.notes }}</strong></td>
+            {% else %}
+            <!-- Add spaces to the records that have level greater than 0 according to their level -->
+            <!-- Use the built-in widthratio template tag to multiply the level by 3 and assign it to a variable called spaces -->
+            {% widthratio account.level 1 4 as spaces %}
+            <!-- Use the HTML   entity to repeat a space character the number of times specified by spaces -->
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.code }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.name }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.level }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.account_type }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.description }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.opening_balance }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.debit_only }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.parent_account }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.notes }}</td>
+            {% endif %}
+        </tr>
         {% endfor %}
     </tbody>
 </table>
 <script>
-    document.getElementById('exportCsvBtn').addEventListener('click', function() {
+    document.getElementById('exportCsvBtn').addEventListener('click', function () {
         // Redirect to the export CSV URL
         window.location.href = "{% url 'COA:export_csv' %}";
     });
-    document.getElementById('importCsvBtn').addEventListener('click', function() {
+    document.getElementById('importCsvBtn').addEventListener('click', function () {
         // Redirect to the import CSV URL
         window.location.href = "{% url 'COA:import_csv' %}";
     });
@@ -106,34 +106,34 @@
 
 
     // Define a function that filters the table rows by a given value
-function filterTableRows(value) {
-  // Convert the value to uppercase
-  value = value.toUpperCase();
-  // Loop through all the table rows
-  $("#example-table > tbody > tr").each(function() {
-    // Get the text of all the table cells in the current row
-    var rowText = $(this).text().toUpperCase();
-    // Check if the row text contains the value
-    if (rowText.indexOf(value) > -1) {
-      // Show the row
-      $(this).show();
-    } else {
-      // Hide the row
-      $(this).hide();
+    function filterTableRows(value) {
+        // Convert the value to uppercase
+        value = value.toUpperCase();
+        // Loop through all the table rows
+        $("#example-table > tbody > tr").each(function () {
+            // Get the text of all the table cells in the current row
+            var rowText = $(this).text().toUpperCase();
+            // Check if the row text contains the value
+            if (rowText.indexOf(value) > -1) {
+                // Show the row
+                $(this).show();
+            } else {
+                // Hide the row
+                $(this).hide();
+            }
+        });
     }
-  });
-}
 
-// Select the input element by id
-var input = $("#filter-input");
-// Attach a keyup event handler to the input element
-input.on("keyup", function() {
-  // Get the input value
-  var value = input.val();
-  // Filter the table rows by the input value
-  filterTableRows(value);
-});
+    // Select the input element by id
+    var input = $("#filter-input");
+    // Attach a keyup event handler to the input element
+    input.on("keyup", function () {
+        // Get the input value
+        var value = input.val();
+        // Filter the table rows by the input value
+        filterTableRows(value);
+    });
 </script>
 
-  
+
 {% endblock %}
