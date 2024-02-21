@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% load spacefilters %}
-{% load crispy_forms_tags %}
-{% load widget_tweaks %}
 {% block title %}
     Chart Of Accounts
 {% endblock title %}
 {% block content %}
+
+
+<input type="text" id="filter-input" placeholder="Filter by name or code" >
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
@@ -43,15 +44,8 @@
     </div>
 </nav>
 
-<!-- Display the filter form as a form with the filter fields and a submit button -->
-<div class="filter-bar">
-    <form method="GET">
-      {% csrf_token %}
-      {{ filter.form|crispy }}  
-    </form>
-  </div>
-{% autoescape on %}
-<table class="table table-bordered">
+
+<table id="example-table" class="table table-bordered" >
     <thead>
         <tr>
             <th>Code</th>
@@ -98,7 +92,6 @@
         {% endfor %}
     </tbody>
 </table>
-{% endautoescape %}
 <script>
     document.getElementById('exportCsvBtn').addEventListener('click', function() {
         // Redirect to the export CSV URL
@@ -108,5 +101,39 @@
         // Redirect to the import CSV URL
         window.location.href = "{% url 'COA:import_csv' %}";
     });
+
+
+
+
+    // Define a function that filters the table rows by a given value
+function filterTableRows(value) {
+  // Convert the value to uppercase
+  value = value.toUpperCase();
+  // Loop through all the table rows
+  $("#example-table > tbody > tr").each(function() {
+    // Get the text of all the table cells in the current row
+    var rowText = $(this).text().toUpperCase();
+    // Check if the row text contains the value
+    if (rowText.indexOf(value) > -1) {
+      // Show the row
+      $(this).show();
+    } else {
+      // Hide the row
+      $(this).hide();
+    }
+  });
+}
+
+// Select the input element by id
+var input = $("#filter-input");
+// Attach a keyup event handler to the input element
+input.on("keyup", function() {
+  // Get the input value
+  var value = input.val();
+  // Filter the table rows by the input value
+  filterTableRows(value);
+});
 </script>
+
+  
 {% endblock %}
