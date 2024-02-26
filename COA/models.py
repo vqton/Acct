@@ -6,6 +6,8 @@ from django.http import HttpResponse
 from django.utils.encoding import smart_str
 from django.db import transaction
 from validators import ValidationError
+
+
 # Create your models here.
 class Account(models.Model):
     code = models.CharField(max_length=10, primary_key=True)
@@ -25,10 +27,12 @@ class Account(models.Model):
     def export_to_csv():
         response = HttpResponse(content_type='text/csv; charset=utf-8')
         response['Content-Disposition'] = 'attachment; filename="account_data.csv"'
-        
+
         writer = csv.writer(response, encoding='utf-8-sig')
-        writer.writerow(['Code', 'Name', 'Level', 'Account Type', 'Description', 'Opening Balance', 'Debit Only', 'Parent Account', 'Notes'])
-        
+        writer.writerow(
+            ['Code', 'Name', 'Level', 'Account Type', 'Description', 'Opening Balance', 'Debit Only', 'Parent Account',
+             'Notes'])
+
         accounts = Account.objects.all()
         for account in accounts:
             row = [
@@ -36,16 +40,16 @@ class Account(models.Model):
                 account.name,
                 account.level,
                 account.account_type,
-                account.description,
+                account.description if account.description else '',
                 account.opening_balance,
                 account.debit_only,
                 account.parent_account_id if account.parent_account else '',
                 account.notes,
             ]
             writer.writerow([str(value) if value is not None else '' for value in row])
-        
+
         return response
-    
+
     @staticmethod
     def import_from_csv(file):
         # file_data = file.read().decode('utf-8-sig')
@@ -54,7 +58,7 @@ class Account(models.Model):
         # Skip the header row
         next(lines)
         with connection.cursor() as cursor:
-            for fields in lines: 
+            for fields in lines:
                 account_data = dict(
                     code=fields[0],
                     name=fields[1],
@@ -71,24 +75,27 @@ class Account(models.Model):
                 INSERT INTO coa_account (CODE, NAME, LEVEL, account_type, description, opening_balance, debit_only, parent_account_id, notes)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
                 """
-                params = [account_data['code'], account_data['name'], account_data['level'], account_data['account_type'], account_data['description'], account_data['opening_balance'], account_data['debit_only'], account_data['parent_account_id'], account_data['notes']]
-                
+                params = [account_data['code'], account_data['name'], account_data['level'],
+                          account_data['account_type'], account_data['description'], account_data['opening_balance'],
+                          account_data['debit_only'], account_data['parent_account_id'], account_data['notes']]
+
                 # Print the complete query
                 print("Executing query:", cursor.mogrify(query, params))
-                
+
                 try:
                     cursor.execute(query, params)
                 # Catch the duplicate key error
                 except IntegrityError as e:
-                # Rollback the transaction
+                    # Rollback the transaction
                     connection.rollback()
-                # Print the error message
+                    # Print the error message
                     print("Error:", e)
                 # Skip or update the row as needed
                 # For example, you can use cursor.execute("UPDATE ...") to update the existing row
                 # Or you can use continue to skip the row and move on to the next one
                 continue
-          
+
+
 class Transaction(models.Model):
     account = models.ForeignKey('Account', on_delete=models.CASCADE)
     opening_balance = models.DecimalField(max_digits=19, decimal_places=4)
