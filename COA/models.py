@@ -1,16 +1,14 @@
 from decimal import Decimal
+
+import unicodecsv as csv
 from django.db import IntegrityError, connection
 from django.db import models
-import unicodecsv as csv
 from django.http import HttpResponse
-from django.utils.encoding import smart_str
-from django.db import transaction
-from validators import ValidationError
 
 
 # Create your models here.
 class Account(models.Model):
-    code = models.CharField(max_length=10, primary_key=True)
+    code = models.CharField(max_length=10, primary_key=True, )
     name = models.CharField(max_length=255)
     level = models.PositiveSmallIntegerField(default=0)
     account_type = models.CharField(max_length=20)

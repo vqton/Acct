@@ -25,7 +25,7 @@
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button class="btn btn-primary me-2">
+                        <button class="btn btn-primary me-2" id="newAccountBtn">
                             <i class="bi bi-plus"></i> New Account
                         </button>
                     </li>
@@ -118,6 +118,10 @@
             window.location.href = "{% url 'COA:import_csv' %}";
         });
 
+        document.getElementById('newAccountBtn').addEventListener('click', function () {
+            // Redirect to the import CSV URL
+            window.location.href = "{% url 'COA:account_create' %}";
+        });
 
         // Define a function that filters the table rows by a given value
         function filterTableRows(value) {

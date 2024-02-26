@@ -1,0 +1,13 @@
+<!-- templates/coa/account_create.html -->
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+<h1 class="h1">Create Account</h1>
+<form method="post">
+  {% csrf_token %}
+  {% crispy form %}
+  <button type="submit" class="btn btn-primary">Create</button>
+</form>
+{% endblock %}
