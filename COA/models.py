@@ -12,14 +12,18 @@ class Account(models.Model):
     name = models.CharField(max_length=255)
     level = models.PositiveSmallIntegerField(default=0)
     account_type = models.CharField(max_length=20)
-    description = models.CharField(max_length=255, default=None, null=True, blank=True)
-    opening_balance = models.DecimalField(max_digits=19, decimal_places=4, default=0)
+    description = models.CharField(
+        max_length=255, default=None, null=True, blank=True)
+    opening_balance = models.DecimalField(
+        max_digits=19, decimal_places=4, default=0)
     debit_only = models.BooleanField(default=True)
-    parent_account = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
-    notes = models.CharField(max_length=255, blank=True, null=True, default=None)
+    parent_account = models.ForeignKey(
+        'self', on_delete=models.CASCADE, null=True)
+    notes = models.CharField(
+        max_length=255, blank=True, null=True, default=None)
 
     def __str__(self):
-        return self.name
+        return f'{self.code} - {self.name}'
 
     @staticmethod
     def export_to_csv():
@@ -44,7 +48,8 @@ class Account(models.Model):
                 account.parent_account_id if account.parent_account else '',
                 account.notes,
             ]
-            writer.writerow([str(value) if value is not None else '' for value in row])
+            writer.writerow(
+                [str(value) if value is not None else '' for value in row])
 
         return response
 

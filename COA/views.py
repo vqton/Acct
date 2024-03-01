@@ -6,6 +6,8 @@ from django.shortcuts import render
 from .forms import AccountFilter
 from django_filters.views import FilterView
 from .forms import AccountForm
+from .forms import UploadFileForm
+from .models import Account
 
 
 class AccountListView(FilterView):
@@ -19,15 +21,6 @@ class AccountCreateView(CreateView):
     model = Account
     template_name = 'coa/account_create.html'
     form_class = AccountForm
-    # fields = ['code', 'name', 'level', 'account_type', 'description', 'opening_balance', 'debit_only', 'parent_account']
-
-    def form_valid(self, form):
-        # get the parent account from the form
-        parent_account = form.cleaned_data.get('parent_code')
-        # set the debit only field to the same value as the parent account
-        form.instance.debit_only = parent_account.debit_only
-        # call the super method to save the form
-        return super().form_valid(form)
 
 
 class AccountDetailView(DetailView):
@@ -38,7 +31,8 @@ class AccountDetailView(DetailView):
 class AccountUpdateView(UpdateView):
     model = Account
     template_name = 'coa/account_update.html'
-    fields = ['code', 'name', 'level', 'account_type', 'description', 'opening_balance', 'debit_only', 'parent_account']
+    fields = ['code', 'name', 'level', 'account_type', 'description',
+              'opening_balance', 'debit_only', 'parent_account']
 
 
 class AccountDeleteView(DeleteView):
@@ -49,14 +43,6 @@ class AccountDeleteView(DeleteView):
 
 def export_csv_view(request):
     return Account.export_to_csv()
-
-
-def import_csv_view(request):
-    from django.shortcuts import render
-
-
-from .forms import UploadFileForm
-from .models import Account
 
 
 def import_csv_view(request):

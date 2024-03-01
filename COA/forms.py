@@ -17,10 +17,12 @@ class AccountFilter(FilterSet):
     # You can use a BooleanFilter for the debit_only field
     code = CharFilter(field_name='code', lookup_expr='icontains')
     name = CharFilter(field_name='name', lookup_expr='icontains')
-    level = ChoiceFilter(field_name='level', choices=[(0, '0'), (1, '1'), (2, '2'), (3, '3')])
+    level = ChoiceFilter(field_name='level', choices=[
+                         (0, '0'), (1, '1'), (2, '2'), (3, '3')])
     account_type = ChoiceFilter(field_name='account_type',
                                 choices=[('TÀI SẢN', 'TÀI SẢN'), ('NỢ PHẢI TRẢ', 'NỢ PHẢI TRẢ'),
-                                         ('VỐN CHỦ SỞ HỮU', 'VỐN CHỦ SỞ HỮU'), ('DOANH THU', 'DOANH THU'),
+                                         ('VỐN CHỦ SỞ HỮU',
+                                          'VỐN CHỦ SỞ HỮU'), ('DOANH THU', 'DOANH THU'),
                                          ('CHI PHÍ', 'CHI PHÍ')])
     debit_only = BooleanFilter(field_name='debit_only')
 
@@ -31,9 +33,23 @@ class AccountFilter(FilterSet):
 
 
 class AccountForm(forms.ModelForm):
-    parent_code = forms.ModelChoiceField(queryset=Account.objects.all(), label='Parent Code')
+    parent_account = forms.ModelChoiceField(
+        queryset=Account.objects.filter(level__in=[1, 2]),
+        to_field_name="code",
+        label_from_instance=lambda obj: f'[{obj.code}] - {obj.name}'
+    )
+    description = forms.CharField(widget=forms.Textarea)
 
     class Meta:
         model = Account
-        fields = ['code', 'name', 'level', 'account_type', 'description', 'opening_balance', 'debit_only',
-                  'parent_code']
+        fields = [
+            'code',
+            'parent_account',
+            'name',
+            'level',
+            'account_type',
+            'description',
+            'opening_balance',
+            'debit_only',
+
+            'notes']
