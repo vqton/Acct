@@ -36,7 +36,6 @@ class AccountForm(forms.ModelForm):
     parent_account = forms.ModelChoiceField(
         queryset=Account.objects.filter(level__in=[1, 2]),
         to_field_name="code",
-        label_from_instance=lambda obj: f'[{obj.code}] - {obj.name}'
     )
     description = forms.CharField(widget=forms.Textarea)
 
@@ -51,5 +50,4 @@ class AccountForm(forms.ModelForm):
             'description',
             'opening_balance',
             'debit_only',
-
             'notes']

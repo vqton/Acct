@@ -21,6 +21,7 @@ class Account(models.Model):
         'self', on_delete=models.CASCADE, null=True)
     notes = models.CharField(
         max_length=255, blank=True, null=True, default=None)
+    is_original = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.code} - {self.name}'
