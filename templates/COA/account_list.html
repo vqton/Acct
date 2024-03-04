@@ -1,52 +1,52 @@
 {% extends 'base.html' %}
 {% load spacefilters %}
 {% block title %}
-    Chart Of Accounts
+Chart Of Accounts
 {% endblock title %}
 {% block content %}
 
 
-    <input type="text" id="filter-input" placeholder="Filter by name or code">
+<input type="text" id="filter-input" placeholder="Filter by name or code">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <h1 class="navbar-brand">Account List</h1>
-            <div class="navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <!-- Reorganize the toolbar operations -->
-                    <li class="nav-item">
-                        <button class="btn btn-info" id="exportCsvBtn">
-                            <i class="bi bi-file-earmark-text"></i> Export CSV
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn btn-success" id="importCsvBtn">
-                            <i class="bi bi-upload"></i> Import CSV
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn btn-primary me-2" id="newAccountBtn">
-                            <i class="bi bi-plus"></i> New Account
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn btn-secondary me-2">
-                            <i class="bi bi-pencil"></i> Edit Account
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn btn-danger me-2">
-                            <i class="bi bi-trash"></i> Delete Selected
-                        </button>
-                    </li>
-                </ul>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <h1 class="navbar-brand">Account List</h1>
+        <div class="navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <!-- Reorganize the toolbar operations -->
+                <li class="nav-item">
+                    <button class="btn btn-info" id="exportCsvBtn">
+                        <i class="bi bi-file-earmark-text"></i> Export CSV
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-success" id="importCsvBtn">
+                        <i class="bi bi-upload"></i> Import CSV
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-primary me-2" id="newAccountBtn">
+                        <i class="bi bi-plus"></i> New Account
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-secondary me-2">
+                        <i class="bi bi-pencil"></i> Edit Account
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-danger me-2" id="deleteAcctBtn">
+                        <i class="bi bi-trash"></i> Delete Selected
+                    </button>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
 
-    <table id="example-table" class="table table-bordered">
-        <thead>
+<table id="example-table" class="table table-bordered">
+    <thead>
         <tr>
             <th>Select</th> <!-- Add a header for the checkbox column -->
             <th>Code</th>
@@ -59,99 +59,156 @@
             <th>Parent Account</th>
             <th>Notes</th>
         </tr>
-        </thead>
-        <tbody>
+    </thead>
+    <tbody>
         {% for account in accounts %}
-            <tr>
-                <!-- Set the records that have level 0 to bold -->
-                {% if account.level == 1 %}
-                    <td>
-                        <input type="checkbox" name="account-checkbox" disabled>
-                        <input type="hidden" name="account-id" value="{{ account.id }}">
-                    </td>
-                    <td><strong>{{ account.code }}</strong></td>
-                    <td><strong>{{ account.name }}</strong></td>
-                    <td><strong>{{ account.level }}</strong></td>
-                    <td><strong>{{ account.account_type }}</strong></td>
-                    <td><strong>{{ account.description | default:'' }}</strong></td>
-                    <td><strong>{{ account.opening_balance }}</strong></td>
-                    <td><strong>{{ account.debit_only }}</strong></td>
-                    <td><strong>{{ account.parent_account | default:''}}</strong></td>
-                    <td><strong>{{ account.notes | default:''}}</strong></td>
-                {% else %}
-                    <!-- Add spaces to the records that have level greater than 0 according to their level -->
-                    <!-- Use the built-in widthratio template tag to multiply the level by 3 and assign it to a variable called spaces -->
-                    {% widthratio account.level 1 4 as spaces %}
-                    <!-- Use the HTML   entity to repeat a space character the number of times specified by spaces -->
-                    {% if account.level == 2 %}
-                        <td>
-                            <input type="checkbox" name="account-checkbox" disabled>
-                            <input type="hidden" name="account-id" value="{{ account.id }}">
-                        </td>
-                    {% else %}
-                        <td>
-                            <input type="checkbox" name="account-checkbox">
-                            <input type="hidden" name="account-id" value="{{ account.id }}">
-                        </td>
-                    {% endif %}
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.code }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.name }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.level }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.account_type }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.description| default:'' }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.opening_balance }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.debit_only }}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.parent_account | default:''}}</td>
-                    <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.notes | default:''}}</td>
-                {% endif %}
-            </tr>
+        <tr>
+            <!-- Set the records that have level 0 to bold -->
+            {% if account.level == 1 %}
+            <td>
+                <input type="checkbox" name="account-checkbox" disabled>
+                <input type="hidden" name="account-id" value="{{ account.code }}">
+            </td>
+            <td><strong>{{ account.code }}</strong></td>
+            <td><strong>{{ account.name }}</strong></td>
+            <td><strong>{{ account.level }}</strong></td>
+            <td><strong>{{ account.account_type }}</strong></td>
+            <td><strong>{{ account.description | default:'' }}</strong></td>
+            <td><strong>{{ account.opening_balance }}</strong></td>
+            <td><strong>{{ account.debit_only }}</strong></td>
+            <td><strong>{{ account.parent_account | default:''}}</strong></td>
+            <td><strong>{{ account.notes | default:''}}</strong></td>
+            {% else %}
+            <!-- Add spaces to the records that have level greater than 0 according to their level -->
+            <!-- Use the built-in widthratio template tag to multiply the level by 3 and assign it to a variable called spaces -->
+            {% widthratio account.level 1 4 as spaces %}
+            <!-- Use the HTML   entity to repeat a space character the number of times specified by spaces -->
+            {% if account.level == 2 %}
+            <td>
+                <input type="checkbox" name="account-checkbox" disabled>
+                <input type="hidden" name="account-id" value="{{ account.code }}">
+            </td>
+            {% else %}
+            <td>
+                <input type="checkbox" name="account-checkbox" value="{{ account.code }}">
+                <input type="hidden" name="account-id" id="{{account.pk}}" value="{{ account.code }}">
+            </td>
+            {% endif %}
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.code }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.name }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.level }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.account_type }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.description| default:'' }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.opening_balance }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.debit_only }}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.parent_account | default:''}}</td>
+            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.notes | default:''}}</td>
+            {% endif %}
+        </tr>
         {% endfor %}
-        </tbody>
-    </table>
-    <script>
-        document.getElementById('exportCsvBtn').addEventListener('click', function () {
-            // Redirect to the export CSV URL
-            window.location.href = "{% url 'COA:export_csv' %}";
-        });
-        document.getElementById('importCsvBtn').addEventListener('click', function () {
-            // Redirect to the import CSV URL
-            window.location.href = "{% url 'COA:import_csv' %}";
-        });
+    </tbody>
+</table>
+<script>
 
-        document.getElementById('newAccountBtn').addEventListener('click', function () {
-            // Redirect to the import CSV URL
-            window.location.href = "{% url 'COA:account_create' %}";
-        });
 
-        // Define a function that filters the table rows by a given value
-        function filterTableRows(value) {
-            // Convert the value to uppercase
-            value = value.toUpperCase();
-            // Loop through all the table rows
-            $("#example-table > tbody > tr").each(function () {
-                // Get the text of all the table cells in the current row
-                var rowText = $(this).text().toUpperCase();
-                // Check if the row text contains the value
-                if (rowText.indexOf(value) > -1) {
-                    // Show the row
-                    $(this).show();
-                } else {
-                    // Hide the row
-                    $(this).hide();
-                }
-            });
+    document.getElementById('exportCsvBtn').addEventListener('click', function () {
+        // Redirect to the export CSV URL
+        window.location.href = "{% url 'COA:export_csv' %}";
+    });
+    document.getElementById('importCsvBtn').addEventListener('click', function () {
+        // Redirect to the import CSV URL
+        window.location.href = "{% url 'COA:import_csv' %}";
+    });
+
+    document.getElementById('newAccountBtn').addEventListener('click', function () {
+        // Redirect to the import CSV URL
+        window.location.href = "{% url 'COA:account_create' %}";
+    });
+    // document.getElementById('deleteAcctBtn').addEventListener('click', function () {
+    //     // Redirect to the import CSV URL
+    //     window.location.href = "";
+    // });
+
+
+
+
+
+
+
+    // Define a function that filters the table rows by a given value
+    function filterTableRows(value) {
+        // Convert the value to uppercase
+        value = value.toUpperCase();
+        // Loop through all the table rows
+        $("#example-table > tbody > tr").each(function () {
+            // Get the text of all the table cells in the current row
+            var rowText = $(this).text().toUpperCase();
+            // Check if the row text contains the value
+            if (rowText.indexOf(value) > -1) {
+                // Show the row
+                $(this).show();
+            } else {
+                // Hide the row
+                $(this).hide();
+            }
+        });
+    }
+
+    // Select the input element by id
+    var input = $("#filter-input");
+    // Attach a keyup event handler to the input element
+    input.on("keyup", function () {
+        // Get the input value
+        var value = input.val();
+        // Filter the table rows by the input value
+        filterTableRows(value);
+    });
+
+
+
+    const table = document.getElementById('example-table'); // Replace with your table ID
+    const deleteButton = document.getElementById('deleteAcctBtn');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    deleteButton.addEventListener('click', function () {
+        const selectedIds = [];
+        console.log('hello')
+        // Loop through checkboxes and collect selected IDs
+        const checkboxes = table.querySelectorAll('input[type="checkbox"]:checked');
+        for (const checkbox of checkboxes) {
+            const id = checkbox.value; // Assuming IDs are stored in the checkbox value
+            
+            selectedIds.push(id);
+
         }
 
-        // Select the input element by id
-        var input = $("#filter-input");
-        // Attach a keyup event handler to the input element
-        input.on("keyup", function () {
-            // Get the input value
-            var value = input.val();
-            // Filter the table rows by the input value
-            filterTableRows(value);
-        });
-    </script>
+        if (selectedIds.length === 0) {
+            alert('Please select at least one account to delete.');
+            return;
+        }
+
+        // Perform AJAX requests for deletion
+        for (const id of selectedIds) {
+            fetch('/coa/accounts/${id}/delete/', {
+                method: 'DELETE',
+                // Consider adding CSRF token for security:
+                //headers: { 'X-CSRF-TOKEN': csrftoken }
+                
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Handle successful deletion on client-side
+                        // e.g., remove row from the table
+                        console.log(`Account with ID ${id} deleted successfully.`);
+                        // ... update UI as needed
+                    } else {
+                        // Handle error handling on client-side
+                        console.error(`Error deleting account with ID ${id}`);
+                        alert('An error occurred while deleting the account. Please try again.');
+                    }
+                });
+        }
+    });
+</script>
 
 
 {% endblock %}

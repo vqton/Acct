@@ -1,5 +1,6 @@
 from django.http import HttpResponse
-from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse, reverse_lazy
 from .models import Account
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.shortcuts import render
@@ -10,35 +11,39 @@ from .forms import UploadFileForm
 from .models import Account
 
 
-class AccountListView(FilterView):
+class AccountListView(LoginRequiredMixin, FilterView):
     model = Account
     template_name = 'coa/account_list.html'
     context_object_name = 'accounts'
     filterset_class = AccountFilter
 
 
-class AccountCreateView(CreateView):
+class AccountCreateView(LoginRequiredMixin, CreateView):
     model = Account
     template_name = 'coa/account_create.html'
     form_class = AccountForm
 
+    def get_success_url(self):
+       # Example: Redirect to the detail page for the created account
+        return reverse('COA:account_detail', args=[self.object.pk])
 
-class AccountDetailView(DetailView):
+
+class AccountDetailView(LoginRequiredMixin, DetailView):
     model = Account
     template_name = 'coa/account_detail.html'
 
 
-class AccountUpdateView(UpdateView):
+class AccountUpdateView(LoginRequiredMixin, UpdateView):
     model = Account
     template_name = 'coa/account_update.html'
     fields = ['code', 'name', 'level', 'account_type', 'description',
               'opening_balance', 'debit_only', 'parent_account']
 
 
-class AccountDeleteView(DeleteView):
+class AccountDeleteView(LoginRequiredMixin, DeleteView):
     model = Account
     template_name = 'coa/account_delete.html'
-    success_url = reverse_lazy('coa:account_list')
+    success_url = reverse_lazy('COA:account_list')
 
 
 def export_csv_view(request):

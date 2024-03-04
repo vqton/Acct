@@ -5,9 +5,16 @@
 
 {% block content %}
 <h1 class="h1">Create Account Code</h1>
+<p></p>
 <form method="post">
+  
   {% csrf_token %}
-  {% crispy form %}
+  
+
+{% comment %}
+{% crispy form  %} 
+{% endcomment %}
+{{ form.as_p }}
   <button type="submit" class="btn btn-primary">Create</button>
 </form>
 {% endblock %}

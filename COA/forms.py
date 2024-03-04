@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django_filters import FilterSet, CharFilter, ChoiceFilter, BooleanFilter
 from .models import Account
 from django import forms
@@ -33,17 +34,11 @@ class AccountFilter(FilterSet):
 
 
 class AccountForm(forms.ModelForm):
-    parent_account = forms.ModelChoiceField(
-        queryset=Account.objects.filter(level__in=[1, 2]),
-        to_field_name="code",
-    )
-    description = forms.CharField(widget=forms.Textarea)
-
     class Meta:
         model = Account
         fields = [
-            'code',
             'parent_account',
+            'code',
             'name',
             'level',
             'account_type',
