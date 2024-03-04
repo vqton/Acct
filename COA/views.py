@@ -22,10 +22,11 @@ class AccountCreateView(LoginRequiredMixin, CreateView):
     model = Account
     template_name = 'coa/account_create.html'
     form_class = AccountForm
+    success_url = reverse_lazy('COA:account_list')
 
     def get_success_url(self):
        # Example: Redirect to the detail page for the created account
-        return reverse('COA:account_detail', args=[self.object.pk])
+        return reverse('COA:account_list', args=[self.object.pk])
 
 
 class AccountDetailView(LoginRequiredMixin, DetailView):
@@ -38,6 +39,7 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'coa/account_update.html'
     fields = ['code', 'name', 'level', 'account_type', 'description',
               'opening_balance', 'debit_only', 'parent_account']
+    success_url = reverse_lazy('COA:account_list')
 
 
 class AccountDeleteView(LoginRequiredMixin, DeleteView):

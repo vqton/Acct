@@ -4,113 +4,83 @@
 Chart Of Accounts
 {% endblock title %}
 {% block content %}
-
-
-<input type="text" id="filter-input" placeholder="Filter by name or code">
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <h1 class="navbar-brand">Account List</h1>
-        <div class="navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <!-- Reorganize the toolbar operations -->
-                <li class="nav-item">
-                    <button class="btn btn-info" id="exportCsvBtn">
-                        <i class="bi bi-file-earmark-text"></i> Export CSV
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="btn btn-success" id="importCsvBtn">
-                        <i class="bi bi-upload"></i> Import CSV
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="btn btn-primary me-2" id="newAccountBtn">
-                        <i class="bi bi-plus"></i> New Account
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="btn btn-secondary me-2">
-                        <i class="bi bi-pencil"></i> Edit Account
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="btn btn-danger me-2" id="deleteAcctBtn">
-                        <i class="bi bi-trash"></i> Delete Selected
-                    </button>
-                </li>
-            </ul>
+<div class="container ">
+    <h1>Account List</h1>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input type="text" id="filter-input" class="form-control" placeholder="Filter by name or code">
+        </div>
+        <div class="col-md-6 d-flex justify-content-end">
+            <button type="button" class="btn btn-primary" id="exportCsvBtn">
+                <i class="bi bi-file-earmark-text"></i> Export CSV
+            </button>
+            <button type="button" class="btn btn-success ms-2" id="importCsvBtn">
+                <i class="bi bi-upload"></i> Import CSV
+            </button>
+            <a href="{% url 'COA:account_create' %}" class="btn btn-info ms-2">
+                <i class="bi bi-plus-circle"></i> New Account
+            </a>
         </div>
     </div>
-</nav>
+
+    <table id="example-table" class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">
+                    <input type="checkbox" id="select-all" name="account-checkbox" onclick="selectAllCheckboxes()">
+                    Select All
+                </th>
+                <th scope="col">Code</th>
+                <th scope="col">Name</th>
+                <th scope="col">Level</th>
+                <th scope="col">Account Type</th>
+                <th scope="col">Description</th>
+                <th scope="col">Opening Balance</th>
+                <th scope="col">Debit Only</th>
+                <th scope="col">Parent Account</th>
+                <th scope="col">Notes</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for account in accounts %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="account-checkbox" class="account-checkbox" value="{{ account.pk }}">
+                </td>
+                <td> {{account.code}}</td>
+                <td> {{account.name}} </td>
+                <td>{{ account.level }}</td>
+                <td>{{ account.account_type }}</td>
+                <td>{{ account.description | default:'' }}</td>
+                <td>{{ account.opening_balance }}</td>
+                <td>{{ account.debit_only }}</td>
+                <td>{{ account.parent_account | default:'' }}</td>
+                <td>{{ account.notes | default:'' }}</td>
+                <td>
+
+                    {% if account.is_original == False %}
+                    <a href="{% url 'COA:account_detail' account.pk %}" class="btn btn-primary btn-sm"> <i
+                            class="fa fa-eye"></i></a>
+                    <a href="{% url 'COA:account_update' account.pk %}" class="btn btn-warning btn-sm"><i
+                            class="fa fa-pencil"></i></a>
+                    <a href="{% url 'COA:account_delete' account.pk %}" class="btn btn-danger btn-sm"> <i
+                            class="fa fa-trash"></i></a>
+                    {% endif %}
 
 
-<table id="example-table" class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Select</th> <!-- Add a header for the checkbox column -->
-            <th>Code</th>
-            <th>Name</th>
-            <th>Level</th>
-            <th>Account Type</th>
-            <th>Description</th>
-            <th>Opening Balance</th>
-            <th>Debit Only</th>
-            <th>Parent Account</th>
-            <th>Notes</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for account in accounts %}
-        <tr>
-            <!-- Set the records that have level 0 to bold -->
-            {% if account.level == 1 %}
-            <td>
-                <input type="checkbox" name="account-checkbox" disabled>
-                <input type="hidden" name="account-id" value="{{ account.code }}">
-            </td>
-            <td><strong>{{ account.code }}</strong></td>
-            <td><strong>{{ account.name }}</strong></td>
-            <td><strong>{{ account.level }}</strong></td>
-            <td><strong>{{ account.account_type }}</strong></td>
-            <td><strong>{{ account.description | default:'' }}</strong></td>
-            <td><strong>{{ account.opening_balance }}</strong></td>
-            <td><strong>{{ account.debit_only }}</strong></td>
-            <td><strong>{{ account.parent_account | default:''}}</strong></td>
-            <td><strong>{{ account.notes | default:''}}</strong></td>
-            {% else %}
-            <!-- Add spaces to the records that have level greater than 0 according to their level -->
-            <!-- Use the built-in widthratio template tag to multiply the level by 3 and assign it to a variable called spaces -->
-            {% widthratio account.level 1 4 as spaces %}
-            <!-- Use the HTML   entity to repeat a space character the number of times specified by spaces -->
-            {% if account.level == 2 %}
-            <td>
-                <input type="checkbox" name="account-checkbox" disabled>
-                <input type="hidden" name="account-id" value="{{ account.code }}">
-            </td>
-            {% else %}
-            <td>
-                <input type="checkbox" name="account-checkbox" value="{{ account.code }}">
-                <input type="hidden" name="account-id" id="{{account.pk}}" value="{{ account.code }}">
-            </td>
-            {% endif %}
-            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.code }}</td>
-            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.name }}</td>
-            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.level }}</td>
-            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.account_type }}</td>
-            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.description| default:'' }}</td>
-            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.opening_balance }}</td>
-            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.debit_only }}</td>
-            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.parent_account | default:''}}</td>
-            <td>{% for i in spaces %}&nbsp;{% endfor %}{{ account.notes | default:''}}</td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                    <!-- <button type="button" class="btn btn-danger btn-sm delete-account"
+                        data-id="{{ account.pk }}">Delete</button> -->
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
 <script>
-
-
     document.getElementById('exportCsvBtn').addEventListener('click', function () {
         // Redirect to the export CSV URL
         window.location.href = "{% url 'COA:export_csv' %}";
@@ -119,22 +89,10 @@ Chart Of Accounts
         // Redirect to the import CSV URL
         window.location.href = "{% url 'COA:import_csv' %}";
     });
-
     document.getElementById('newAccountBtn').addEventListener('click', function () {
         // Redirect to the import CSV URL
         window.location.href = "{% url 'COA:account_create' %}";
     });
-    // document.getElementById('deleteAcctBtn').addEventListener('click', function () {
-    //     // Redirect to the import CSV URL
-    //     window.location.href = "";
-    // });
-
-
-
-
-
-
-
     // Define a function that filters the table rows by a given value
     function filterTableRows(value) {
         // Convert the value to uppercase
@@ -153,7 +111,6 @@ Chart Of Accounts
             }
         });
     }
-
     // Select the input element by id
     var input = $("#filter-input");
     // Attach a keyup event handler to the input element
@@ -163,52 +120,6 @@ Chart Of Accounts
         // Filter the table rows by the input value
         filterTableRows(value);
     });
-
-
-
-    const table = document.getElementById('example-table'); // Replace with your table ID
-    const deleteButton = document.getElementById('deleteAcctBtn');
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    deleteButton.addEventListener('click', function () {
-        const selectedIds = [];
-        console.log('hello')
-        // Loop through checkboxes and collect selected IDs
-        const checkboxes = table.querySelectorAll('input[type="checkbox"]:checked');
-        for (const checkbox of checkboxes) {
-            const id = checkbox.value; // Assuming IDs are stored in the checkbox value
-            
-            selectedIds.push(id);
-
-        }
-
-        if (selectedIds.length === 0) {
-            alert('Please select at least one account to delete.');
-            return;
-        }
-
-        // Perform AJAX requests for deletion
-        for (const id of selectedIds) {
-            fetch('/coa/accounts/${id}/delete/', {
-                method: 'DELETE',
-                // Consider adding CSRF token for security:
-                //headers: { 'X-CSRF-TOKEN': csrftoken }
-                
-            })
-                .then(response => {
-                    if (response.ok) {
-                        // Handle successful deletion on client-side
-                        // e.g., remove row from the table
-                        console.log(`Account with ID ${id} deleted successfully.`);
-                        // ... update UI as needed
-                    } else {
-                        // Handle error handling on client-side
-                        console.error(`Error deleting account with ID ${id}`);
-                        alert('An error occurred while deleting the account. Please try again.');
-                    }
-                });
-        }
-    });
 </script>
-
-
+</div>
 {% endblock %}
