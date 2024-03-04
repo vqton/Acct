@@ -9,3 +9,6 @@ __pycache__\
 .idea
 \.idea
 .idea\*
+*.css
+*.js
+*.map
