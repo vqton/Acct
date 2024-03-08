@@ -16,17 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.auth.views import LoginView, PasswordResetView,LogoutView
+from django.contrib.auth.views import LoginView, PasswordResetView, LogoutView
 
 urlpatterns = [
-    
+
     path("", include("home.urls")),
     path("coa/", include("COA.urls")),
     path("companyinfo/", include("companyinfo.urls")),
     # path("accounts/", include("django.contrib.auth.urls")),
     path(
         "accounts/password_reset/",
-        PasswordResetView.as_view(template_name="registration/password_reset_form.html"),
+        PasswordResetView.as_view(
+            template_name="registration/password_reset_form.html"),
         name="password_reset",
     ),
     path(
@@ -34,10 +35,11 @@ urlpatterns = [
         LoginView.as_view(template_name="registration/login.html"),
         name="login",
     ),
-        path(
+    path(
         "accounts/loggout/",
         LogoutView.as_view(template_name="registration/logged_out.html"),
         name="logout",
     ),
     path("admin/", admin.site.urls),
+    path('customer/', include('customer.urls')),
 ]
