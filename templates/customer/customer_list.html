@@ -6,5 +6,22 @@ Customer List
 
 
 {% block content %}
-<h1 class="h1">hello World</h1>
+<h1>Customer Accounts</h1>
+    <ul>
+        {% for customer in customers %}
+            <li>
+                <strong>{{ customer.name }}</strong>
+                <ul>
+                    <li>Address: {{ customer.address }}</li>
+                    <li>Phone Number: {{ customer.phone_number }}</li>
+                    <li>Email: {{ customer.email }}</li>
+                    <li>Account Balance: ${{ customer.account_balance }}</li>
+                    <li>Credit Limit: ${{ customer.credit_limit }}</li>
+                    <li>Tax ID: {{ customer.tax_id }}</li>
+                    <li>Industry: {{ customer.industry }}</li>
+                    <li>Notes: {{ customer.notes }}</li>
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock content %}

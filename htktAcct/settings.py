@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "home",
     "COA",
     "customer",
+    "faker",
     'django_filters',
     "companyinfo",
     'crispy_forms',
