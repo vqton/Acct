@@ -12,15 +12,15 @@ class Command(BaseCommand):
         for _ in range(100):
             customer = Customer(
                 name=faker.company(),
-                address=faker.address().street_address,
-                phone_number=faker.phone_number(),
+                address=faker.street_address(),
+                phone_number=faker.phone_number()[:20],
                 email=faker.email(),
                 account_balance=faker.pydecimal(
-                    positive=True, max_digits=8, decimal_places=2),
+                    left_digits=5, right_digits=2, positive=True),
                 credit_limit=faker.pydecimal(
-                    positive=True, max_digits=8, decimal_places=2),
+                    left_digits=5, right_digits=2, positive=True),
                 tax_id=faker.unique.ssn(),  # Ensure unique tax id
-                industry=faker.industry(),
+                industry=faker.name,
                 notes=faker.text(),
             )
             customer.save()
