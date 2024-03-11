@@ -1,13 +1,21 @@
 {% extends 'base.html' %}
 {% block title %}
-    Home - Online Accounting
+Home - Online Accounting
 {% endblock title %}
 {% block content %}
-    <div class="container py-5">
-        <h1 class="text-center">Welcome to Our Online Accounting Application</h1>
-        <p class="text-center">Our application provides a comprehensive suite of accounting tools to help you manage your business finances.</p>
-        <div class="d-flex justify-content-center">
-            <a href="{% url 'login' %}" class="btn btn-primary">Log In</a>
-        </div>
+<div class="container py-5">
+    <h1 class="text-center">Welcome to Our Online Accounting Application</h1>
+    <p class="text-center">Our application provides a comprehensive suite of accounting tools to help you manage your
+        business finances.</p>
+    <div class="d-flex justify-content-center">
+
+        {% if user.is_authenticated %}
+        Hello {{user.username}}
+        {% else %}
+        <a href="{% url 'login' %}" class="btn btn-primary">Log In</a>
+        {% endif %}
+
+
     </div>
+</div>
 {% endblock %}

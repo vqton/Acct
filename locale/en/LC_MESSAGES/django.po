@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-07 11:06+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\templates\footer.html:3
+msgid "Your Partner in Business Growth and Financial Management"
+msgstr ""
+
+#: .\templates\navbar.html:15
+msgid "Dashboard"
+msgstr ""
+
+#: .\templates\navbar.html:19
+msgid "Invoices"
+msgstr ""
+
+#: .\templates\navbar.html:22
+msgid "Expenses"
+msgstr ""
+
+#: .\templates\navbar.html:25
+msgid "Reports"
+msgstr ""
+
+#: .\templates\navbar.html:30
+msgid "Master List"
+msgstr ""
+
+#: .\templates\navbar.html:34
+msgid "Company Information"
+msgstr ""
+
+#: .\templates\navbar.html:37
+msgid "Chart Of Accounts"
+msgstr ""
+
+#: .\templates\navbar.html:43
+msgid "Logout"
+msgstr ""
+
+#: .\templates\navbar.html:48
+msgid "Login"
+msgstr ""
