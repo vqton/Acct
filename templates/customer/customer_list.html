@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title %}
 Customer List
@@ -6,22 +6,48 @@ Customer List
 
 
 {% block content %}
-<h1>Customer Accounts</h1>
-    <ul>
+<h1>Customer List</h1>
+
+{% if customers %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Tax ID</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Email</th>
+            <th scope="col">Account Balance</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for customer in customers %}
-            <li>
-                <strong>{{ customer.name }}</strong>
-                <ul>
-                    <li>Address: {{ customer.address }}</li>
-                    <li>Phone Number: {{ customer.phone_number }}</li>
-                    <li>Email: {{ customer.email }}</li>
-                    <li>Account Balance: ${{ customer.account_balance }}</li>
-                    <li>Credit Limit: ${{ customer.credit_limit }}</li>
-                    <li>Tax ID: {{ customer.tax_id }}</li>
-                    <li>Industry: {{ customer.industry }}</li>
-                    <li>Notes: {{ customer.notes }}</li>
-                </ul>
-            </li>
+        <tr>
+            <td><a href="#">{{ customer.name }}</a></td>
+            <td>{{ customer.tax_id }}</td>
+            <td>{{ customer.phone_number }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.account_balance }}</td>
+        </tr>
         {% endfor %}
+    </tbody>
+</table>
+{% if is_paginated %}
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {{ paginator.get_previous_link }}
+        {% for page_num in paginator.page_range %}
+        <li class="page-item {% if page_num == paginator.page.number %}active{% endif %}">
+            <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+        </li>
+        {% endfor %}
+        {{ paginator.get_next_link }}
     </ul>
-{% endblock content %}
+</nav>
+{% endif %}
+{% else %}
+<p>There are no customers currently.</p>
+{% endif %}
+
+</div>
+<a href="#">Create New Customer</a>
+{% endblock content%}
