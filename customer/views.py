@@ -53,6 +53,6 @@ class CustomerUpdateView(UpdateView):
 
 class CustomerDeleteView(DeleteView):
     model = Customer
-    template_name = 'customer_confirm_delete.html'
+    template_name = 'customer/customer_confirm_delete.html'
     # Redirect to the customer list page
     success_url = reverse_lazy('customer-list')
