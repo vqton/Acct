@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block title %}
 Customer List
 {% endblock title %}
@@ -11,6 +11,10 @@ Customer List
 <table class="table table-striped">
     <thead>
         <tr>
+            <th scope="col">
+                <input type="checkbox" id="select-all" name="customer-checkbox" onclick="selectAllCheckboxes()">
+                Select All
+            </th>
             <th scope="col">Name</th>
             <th scope="col">Tax ID</th>
             <th scope="col">Phone Number</th>
@@ -22,6 +26,9 @@ Customer List
     <tbody>
         {% for customer in customers %}
         <tr>
+            <td>
+                <input type="checkbox" name="customer-checkbox" class="customer-checkbox" value="{{ customer.pk }}">
+            </td>
             <td><a href="#">{{ customer.name }}</a></td>
             <td>{{ customer.tax_id }}</td>
             <td>{{ customer.phone_number }}</td>
@@ -52,5 +59,23 @@ Customer List
     </ul>
 </nav>
 {% endif %}
-<a href="#">Create New Customer</a>
+<a href=" {% url 'customers:customer-create' %} ">Create New Customer</a>
+
+<script>
+    function selectAllCheckboxes() {
+        // Get the checkbox with id "select-all"
+        const selectAllCheckbox = document.getElementById('select-all');
+
+        // Get all checkboxes with class "customer-checkbox"
+        const customerCheckboxes = document.querySelectorAll('.customer-checkbox');
+
+        // Loop through each customer checkbox
+        customerCheckboxes.forEach(checkbox => {
+            // Set the checkbox's checked state to match the "select-all" checkbox
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+</script>
+
+
 {% endblock content %}

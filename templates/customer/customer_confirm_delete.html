@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block content %}
 <div class="container">
     <div class="row">
@@ -8,9 +8,10 @@
             <p>Are you sure you want to delete the customer "{{ customer.name }}"?</p>
             <form method="POST">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Yes, delete</button>
+                <button type="submit" class="btn btn-danger"> {% translate 'Yes, delete' %} </button>
             </form>
-            <a href="{% url 'customers:customer-list' %}" class="btn btn-primary mt-3">No, take me back</a>
+            <a href="{% url 'customers:customer-list' %}" class="btn btn-primary mt-3">{% trans 'No, take me back' %}
+            </a>
         </div>
     </div>
 </div>

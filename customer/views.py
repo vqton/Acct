@@ -1,5 +1,5 @@
 # Assuming you have a form for updating customers
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic.edit import DeleteView
@@ -14,14 +14,14 @@ from .models import Customer
 from .forms import CustomerForm  # Assuming you have a form for creating customers
 
 
-class CustomerCreateView(CreateView):
+class CustomerCreateView(LoginRequiredMixin, CreateView):
     model = Customer
     form_class = CustomerForm
-    template_name = 'customer_form.html'
-    success_url = '/customers/'  # Redirect to the customer list page
+    template_name = 'customer/customer_form.html'
+    success_url = reverse_lazy('customers:customer-list')
 
 
-class CustomerListView(ListView):
+class CustomerListView(LoginRequiredMixin, ListView):
     model = Customer
     template_name = 'customer_list.html'
     context_object_name = 'customers'
@@ -38,21 +38,21 @@ class CustomerListView(ListView):
         return context
 
 
-class CustomerDetailView(DetailView):
+class CustomerDetailView(LoginRequiredMixin, DetailView):
     model = Customer
     template_name = 'customer_detail.html'
     context_object_name = 'customer'
 
 
-class CustomerUpdateView(UpdateView):
+class CustomerUpdateView(LoginRequiredMixin, UpdateView):
     model = Customer
     form_class = CustomerForm
     template_name = 'customer_form.html'
     success_url = '/customers/'  # Redirect to the customer list page
 
 
-class CustomerDeleteView(DeleteView):
+class CustomerDeleteView(LoginRequiredMixin, DeleteView):
     model = Customer
     template_name = 'customer/customer_confirm_delete.html'
     # Redirect to the customer list page
-    success_url = reverse_lazy('customer-list')
+    success_url = reverse_lazy('customers:customer-list')

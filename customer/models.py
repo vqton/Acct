@@ -20,7 +20,7 @@ class Customer(models.Model):
 
     # Other relevant fields (you can customize as needed)
     tax_id = models.CharField(
-        max_length=20, blank=True, null=False, primary_key=True)
+        max_length=20, blank=False, null=False, primary_key=True)
     industry = models.CharField(max_length=100, blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
 
