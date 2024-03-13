@@ -1,10 +1,81 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
+{% load i18n %}
 {% block title %}
 Customer List
 {% endblock title %}
 
-
 {% block content %}
-<h1 class="h1">hello World</h1>
+<h1>Customer List</h1>
+
+{% if customers %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">
+                <input type="checkbox" id="select-all" name="customer-checkbox" onclick="selectAllCheckboxes()">
+                Select All
+            </th>
+            <th scope="col">Name</th>
+            <th scope="col">Tax ID</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Email</th>
+            <th scope="col">Account Balance</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for customer in customers %}
+        <tr>
+            <td>
+                <input type="checkbox" name="customer-checkbox" class="customer-checkbox" value="{{ customer.pk }}">
+            </td>
+            <td><a href="#">{{ customer.name }}</a></td>
+            <td>{{ customer.tax_id }}</td>
+            <td>{{ customer.phone_number }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.account_balance }}</td>
+            <td>
+                <a href="{% url 'customers:customer_update' customer.pk %}" class="btn btn-sm btn-info">Edit</a>
+                <a href="{% url 'customers:customer-delete' customer.pk %}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {% for page_num in paginator.page_range %}
+        {% if page_num == page_obj.number %}
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</nav>
+{% endif %}
+<a href=" {% url 'customers:customer-create' %} ">Create New Customer</a>
+
+<script>
+    function selectAllCheckboxes() {
+        // Get the checkbox with id "select-all"
+        const selectAllCheckbox = document.getElementById('select-all');
+
+        // Get all checkboxes with class "customer-checkbox"
+        const customerCheckboxes = document.querySelectorAll('.customer-checkbox');
+
+        // Loop through each customer checkbox
+        customerCheckboxes.forEach(checkbox => {
+            // Set the checkbox's checked state to match the "select-all" checkbox
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+</script>
+
+
 {% endblock content %}
