@@ -7,6 +7,27 @@ Customer List
 {% block content %}
 <h1>Customer List</h1>
 
+<div class="row mb-3">
+    <div class="col-md-6">
+        <input type="text" id="filter-input" class="form-control"
+            placeholder="{% translate 'Filter by name or code' %} ">
+    </div>
+    <div class="col-md-6 d-flex justify-content-end">
+
+
+        <button type="button" class="btn btn-primary" id="exportCsvBtn">
+            <i class="bi bi-file-earmark-text"></i> Export CSV
+        </button>
+
+        <button type="button" class="btn btn-success ms-2" id="importCsvBtn">
+            <i class="bi bi-upload"></i> Import CSV
+        </button>
+        <a href="{% url 'customers:customer-create'%}" class="btn btn-info ms-2">
+            <i class="bi bi-plus-circle"></i> Create New Customer
+        </a>
+    </div>
+</div>
+
 {% if customers %}
 <table class="table table-striped">
     <thead>
@@ -59,7 +80,7 @@ Customer List
     </ul>
 </nav>
 {% endif %}
-<a href=" {% url 'customers:customer-create' %} ">Create New Customer</a>
+
 
 <script>
     function selectAllCheckboxes() {
@@ -75,6 +96,11 @@ Customer List
             checkbox.checked = selectAllCheckbox.checked;
         });
     }
+
+    document.getElementById('exportCsvBtn').addEventListener('click', function () {
+        // Redirect to the export CSV URL
+        window.location.href = "{% url 'customers:export-csv' %}";
+    })
 </script>
 
 

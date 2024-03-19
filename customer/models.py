@@ -1,4 +1,6 @@
 from django.db import models
+from django.http import HttpResponse
+import unicodecsv as csv
 
 
 class Customer(models.Model):
@@ -26,3 +28,25 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def export_to_csv():
+        """Retrieves all customers, creates a CSV response, writes headers and data rows, and returns the CSV content.
+    """
+        customers = Customer.objects.all()
+        response = HttpResponse(content_type='text/csv; charset=utf-8')
+        response['Content-Disposition'] = 'attachment; filename="customer_data.csv"'
+
+        writer = csv.writer(response, encoding='utf-8-sig')
+        writer.writerow([
+            'Tax ID', 'Name', 'Address', 'Phone Number', 'Email',
+            'Account Balance', 'Credit Limit', 'Industry', 'Notes'
+        ])
+
+        for customer in customers:
+            writer.writerow([
+                customer.tax_id, customer.name, customer.address, customer.phone_number, customer.email,
+                customer.account_balance, customer.credit_limit, customer.industry, customer.notes
+            ])
+
+        return response

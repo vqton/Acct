@@ -2,6 +2,7 @@
 
 from django.urls import path
 from . import views
+from .views import export_csv_view
 
 app_name = 'customers'  # Optional: Namespace for URL names
 
@@ -13,4 +14,6 @@ urlpatterns = [
          name='customer_update'),
     path('<str:pk>/delete/', views.CustomerDeleteView.as_view(),
          name='customer-delete'),
+    path('export-csv/customers/', export_csv_view, name='export-csv'),
+
 ]

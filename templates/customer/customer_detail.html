@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+Customer List
+{% endblock title %}
+
+{% block content %}
+<h1>Customer List</h1>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <input type="text" id="filter-input" class="form-control"
+            placeholder="{% translate 'Filter by name or code' %} ">
+    </div>
+    <div class="col-md-6 d-flex justify-content-end">
+        <form action="{% url 'customers:customer-export-csv' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-file-earmark-text"></i> Export CSV
+            </button>
+        </form>
+        <button type="button" class="btn btn-success ms-2" id="importCsvBtn">
+            <i class="bi bi-upload"></i> Import CSV
+        </button>
+        <a href="{% url 'customers:customer-create'%}" class="btn btn-info ms-2">
+            <i class="bi bi-plus-circle"></i> Create New Customer
+        </a>
+    </div>
+</div>
+
+
+
+{% endblock content %}
