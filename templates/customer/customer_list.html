@@ -50,7 +50,7 @@ Customer List
             <td>
                 <input type="checkbox" name="customer-checkbox" class="customer-checkbox" value="{{ customer.pk }}">
             </td>
-            <td><a href="#">{{ customer.name }}</a></td>
+            <td><a href="{% url 'customers:customer-detail' customer.pk %}">{{ customer.name }}</a></td>
             <td>{{ customer.tax_id }}</td>
             <td>{{ customer.phone_number }}</td>
             <td>{{ customer.email }}</td>

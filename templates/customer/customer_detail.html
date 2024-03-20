@@ -1,33 +1,26 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block title %}
-Customer List
+Customer Detail
 {% endblock title %}
 
 {% block content %}
-<h1>Customer List</h1>
-
-<div class="row mb-3">
-    <div class="col-md-6">
-        <input type="text" id="filter-input" class="form-control"
-            placeholder="{% translate 'Filter by name or code' %} ">
-    </div>
-    <div class="col-md-6 d-flex justify-content-end">
-        <form action="{% url 'customers:customer-export-csv' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">
-                <i class="bi bi-file-earmark-text"></i> Export CSV
-            </button>
-        </form>
-        <button type="button" class="btn btn-success ms-2" id="importCsvBtn">
-            <i class="bi bi-upload"></i> Import CSV
-        </button>
-        <a href="{% url 'customers:customer-create'%}" class="btn btn-info ms-2">
-            <i class="bi bi-plus-circle"></i> Create New Customer
-        </a>
+<div class="container py-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Customer Detail</h2>
+        </div>
+        <div class="card-body">
+            <p><strong class="text-primary">Name:</strong> {{ customer.name }}</p>
+            <p><strong class="text-primary">Address:</strong> {{ customer.address }}</p>
+            <p><strong class="text-primary">Phone Number:</strong> {{ customer.phone_number }}</p>
+            <p><strong class="text-primary">Email:</strong> {{ customer.email }}</p>
+            <p><strong class="text-primary">Account Balance:</strong> {{ customer.account_balance }}</p>
+            <p><strong class="text-primary">Credit Limit:</strong> {{ customer.credit_limit }}</p>
+            <p><strong class="text-primary">Tax ID:</strong> {{ customer.tax_id }}</p>
+            <p><strong class="text-primary">Industry:</strong> {{ customer.industry }}</p>
+            <p><strong class="text-primary">Notes:</strong> {{ customer.notes }}</p>
+        </div>
     </div>
 </div>
-
-
-
-{% endblock content %}
+{% endblock %}
