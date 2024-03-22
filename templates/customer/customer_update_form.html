@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block title %}
-Create New Customer
+Update Customer
 {% endblock title %}
 
 {% block content %}
-<h1 class="h1">Create New Customer</h1>
+<h1 class="h1">Update Customer</h1>
 
-<form method="post" action="{% url 'customers:customer-create' %}">
-    {% csrf_token %} {{ form|crispy }} <button type=" submit" class="btn btn-primary">Create Customer</button>
+<form method="post">
+    {% csrf_token %} {{ form|crispy }} <button type=" submit" class="btn btn-primary">Update Customer</button>
 </form>
 
 {% if form.errors %}

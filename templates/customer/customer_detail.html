@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+Customer Detail
+{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Customer Detail</h2>
+        </div>
+        <div class="card-body">
+            <p><strong class="text-primary">Name:</strong> {{ customer.name }}</p>
+            <p><strong class="text-primary">Address:</strong> {{ customer.address }}</p>
+            <p><strong class="text-primary">Phone Number:</strong> {{ customer.phone_number }}</p>
+            <p><strong class="text-primary">Email:</strong> {{ customer.email }}</p>
+            <p><strong class="text-primary">Account Balance:</strong> {{ customer.account_balance }}</p>
+            <p><strong class="text-primary">Credit Limit:</strong> {{ customer.credit_limit }}</p>
+            <p><strong class="text-primary">Tax ID:</strong> {{ customer.tax_id }}</p>
+            <p><strong class="text-primary">Industry:</strong> {{ customer.industry }}</p>
+            <p><strong class="text-primary">Notes:</strong> {{ customer.notes }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
