@@ -15,5 +15,6 @@ urlpatterns = [
     path('<str:pk>/delete/', views.CustomerDeleteView.as_view(),
          name='customer-delete'),
     path('export-csv/customers/', export_csv_view, name='export-csv'),
+    path('filter/', views.FilterCustomersView.as_view(), name='filter'),
 
 ]

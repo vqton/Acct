@@ -15,5 +15,6 @@ __pycache__
 *.map
 ~*.*
 **.pyc
+*.pyc
 *.log
 

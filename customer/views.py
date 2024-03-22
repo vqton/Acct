@@ -3,11 +3,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.http import HttpResponse
 import csv
+from django.http import JsonResponse
+from django.core import serializers
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.edit import DeleteView
-from .forms import CustomerForm
+from .forms import CustomerForm, CustomerUpdateForm
 from django.views.generic.edit import UpdateView
 from django.views.generic import ListView, DetailView
 from django.shortcuts import render
@@ -58,9 +60,9 @@ class CustomerDetailView(LoginRequiredMixin, DetailView):
 
 class CustomerUpdateView(LoginRequiredMixin, UpdateView):
     model = Customer
-    form_class = CustomerForm
-    template_name = 'customer_form.html'
-    success_url = '/customers/'  # Redirect to the customer list page
+    form_class = CustomerUpdateForm
+    template_name = 'customer/customer_update_form.html'
+    success_url = reverse_lazy('customers:customer-list')
 
 
 class CustomerDeleteView(LoginRequiredMixin, DeleteView):
@@ -68,3 +70,11 @@ class CustomerDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'customer/customer_confirm_delete.html'
     # Redirect to the customer list page
     success_url = reverse_lazy('customers:customer-list')
+
+
+class FilterCustomersView(View):
+    def get(self, request, *args, **kwargs):
+        q = request.GET.get('q', '')
+        customers = Customer.objects.filter(name__icontains=q)
+        customer_list = serializers.serialize('json', customers)
+        return JsonResponse(customer_list, safe=False)
