@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "home",
     "COA",
+    "product",
     "customer",
     "faker",
     'django_filters',
