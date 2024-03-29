@@ -2,6 +2,7 @@
 
 from django import forms
 from .models import Customer  # Assuming your Customer model is defined in models.py
+from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
 
 class CustomerUpdateForm(forms.ModelForm):
@@ -26,15 +27,16 @@ class CustomerForm(forms.ModelForm):
             'industry',
             'notes',
         ]
+        widgets = {
+            'notes': SummernoteWidget(),
 
+        }
     # You can customize form widgets, labels, and validation as needed
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Example: Customize widget attributes
         self.fields['account_balance'].widget.attrs.update(
-            {'class': 'form-control'})
-        self.fields['notes'].widget.attrs.update(
             {'class': 'form-control'})
         # Example: Change field label
         self.fields['tax_id'].label = 'Tax ID'
