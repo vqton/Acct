@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container py-5">
+    <h1>Products</h1>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% if products %}
+        {% for product in products %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                {% else %}
+                <img src="{% static 'images/NoImage.jpg' %}" class="card-img-top" alt="No Image">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{% url 'product:product_detail' product.id %}">
+                            {{ product.name }}
+                            <i class="fas fa-link ms-2 text-primary"></i>
+                        </a>
+                    </h5>
+                    <p class="card-text">{{ product.description|truncatechars:150 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">
+                            <i class="fas fa-dollar-sign me-1"></i>
+                            {{ product.unit_price }}
+                        </span>
+                        {% if product.manufacturer %}
+                        <span class="badge bg-primary text-white">
+                            <i class="fas fa-building me-1"></i>
+                            {{ product.manufacturer.name }}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-center">No products found.</p>
+        {% endif %}
+    </div>
+    <br>
+    <a href="{% url 'product:product_create' %}" class="btn btn-primary float-end">
+        <i class="fas fa-plus-circle"></i> Create a New Product
+    </a>
+</div>
+{% endblock %}

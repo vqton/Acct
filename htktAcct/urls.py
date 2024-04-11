@@ -24,6 +24,7 @@ urlpatterns = [
     path("", include("home.urls")),
     path("coa/", include("COA.urls")),
     path("companyinfo/", include("companyinfo.urls")),
+    path("product/", include("product.urls")),
     # path("accounts/", include("django.contrib.auth.urls")),
     path(
         "accounts/password_reset/",

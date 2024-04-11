@@ -49,7 +49,7 @@ class Category(models.Model):
 
 class Manufacturer(models.Model):
     name = models.CharField(max_length=100)
-    country = models.CharField(max_length=50)
+    country = models.CharField(max_length=100)
     email = models.EmailField(null=True, blank=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     website = models.URLField(null=True, blank=True)
