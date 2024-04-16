@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container py-5">
+    <h1>{{ product.name }}</h1>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}">
+            {% else %}
+            <img src="{% static 'images/no-image.svg' %}" class="img-fluid rounded" alt="No Image">
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <p class="lead">{{ product.description }}</p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <span class="fw-bold">Price:</span> {{ product.unit_price }}
+                </li>
+                {% if product.manufacturer %}
+                <li class="list-group-item">
+                    <span class="fw-bold">Manufacturer:</span> {{ product.manufacturer.name }}
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

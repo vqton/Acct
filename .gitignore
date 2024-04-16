@@ -16,3 +16,6 @@ __pycache__\
 **.pyc
 *.log
 __pycache__
+**/.pyc
+**\.pyc
+**.pyc

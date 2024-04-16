@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.core.paginator import Paginator
 from .models import Product, Category, Manufacturer
 # Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
@@ -12,7 +13,28 @@ from .forms import ProductForm, CategoryForm, ManufacturerForm  # Import your fo
 @login_required  # Add if using authentication
 def product_list(request):
     products = Product.objects.all()
-    context = {'products': products}
+
+    # Get the number of products per page from request parameters or settings (default to 10)
+    # Handles cases where 'per_page' is not in GET
+    per_page = int(request.GET.get('per_page', 10))
+
+    # Create a Paginator instance
+    paginator = Paginator(products, per_page)
+
+    # Get the current page number from request parameters (default to 1)
+    page_number = int(request.GET.get('page', 1))
+
+    # Get the requested page (ensuring it's within valid page range)
+    page_obj = paginator.get_page(
+        page_number) if page_number <= paginator.num_pages else paginator.page(paginator.num_pages)
+
+    context = {
+        'products': page_obj.object_list,
+        'paginator': paginator,
+        'page_obj': page_obj,
+        'per_page': per_page,  # Include per_page for customization in the template
+    }
+
     return render(request, 'product/product_list.html', context)
 
 
@@ -20,7 +42,7 @@ def product_list(request):
 def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     context = {'product': product}
-    return render(request, 'product_detail.html', context)
+    return render(request, 'product/product_detail.html', context)
 
 
 @login_required  # Add if using authentication
@@ -34,7 +56,7 @@ def product_create(request):
     else:
         form = ProductForm()
     context = {'form': form}
-    return render(request, 'product_create.html', context)
+    return render(request, 'product/product_create.html', context)
 
 
 @login_required  # Add if using authentication
@@ -46,11 +68,11 @@ def product_update(request, product_id):
         if form.is_valid():
             form.save()
             # Redirect after update
-            return redirect('product_detail', product_id)
+            return redirect('product/product_detail', product_id)
     else:
         form = ProductForm(instance=product)
     context = {'form': form}
-    return render(request, 'product_update.html', context)
+    return render(request, 'product/product_update.html', context)
 
 
 @login_required  # Add if using authentication
@@ -58,9 +80,9 @@ def product_delete(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if request.method == 'POST':
         product.delete()
-        return redirect('product_list')
+        return redirect('product:product_list')
     context = {'product': product}
-    return render(request, 'product_delete.html', context)
+    return render(request, 'product/product_delete.html', context)
 
 # Category Views (similar structure as product views)
 

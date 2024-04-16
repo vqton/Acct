@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h1>Confirm Product Deletion</h1>
+
+    <p>Are you sure you want to delete the following product?</p>
+
+    <ul>
+        <li><strong>Name:</strong> {{ product.name }}</li>
+        {% if product.description %}
+        <li><strong>Description:</strong> {{ product.description|truncatechars:50 }}</li>
+        {% endif %}
+        {% if product.manufacturer %}
+        <li><strong>Manufacturer:</strong> {{ product.manufacturer.name }}</li>
+        {% endif %}
+    </ul>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete Product</button>
+        <a href="{% url 'product:product_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
